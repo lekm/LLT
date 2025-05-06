@@ -26,14 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const COLORS = [
         null,       // 0: Empty
-        '#FF0D0D', // 1: I - Red
-        '#0D0DFF', // 2: J - Blue
-        '#FF7E0D', // 3: L - Orange
-        '#FFFF0D', // 4: O - Yellow
-        '#0DFF0D', // 5: S - Green
-        '#A10DFF', // 6: T - Purple
-        '#FF0DA1'  // 7: Z - Pink (using pink instead of light blue for better contrast)
-        //'#0DFFFF' //   : I - Light Blue (alternate)
+        '#D90429', // 1: I - Red (Brighter)
+        '#00509d', // 2: J - Blue (Deeper)
+        '#f77f00', // 3: L - Orange (Standard)
+        '#FFCF00', // 4: O - Yellow (Standard)
+        '#2a9d8f', // 5: S - Green (Tealish)
+        '#6a0dad', // 6: T - Purple (Standard)
+        '#e71d73'  // 7: Z - Pink (Vibrant)
     ];
 
     const SHAPES = [
@@ -133,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         piece.shape = newShape;
         piece.x += kickX;
+        // Play sound: rotate
     }
 
     function mergePieceToBoard() {
@@ -147,6 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+        // Add jiggle effect when piece locks
+        canvas.classList.add('piece-lock-jiggle');
+        setTimeout(() => canvas.classList.remove('piece-lock-jiggle'), 150); 
+        // Play sound: lock
     }
 
     function clearLines() {
@@ -165,6 +169,11 @@ document.addEventListener('DOMContentLoaded', () => {
                  board.splice(y, 1);
                  board.unshift(Array(COLS).fill(0));
             });
+
+            // --- Add flash effect --- 
+            canvas.classList.add('line-clear-flash');
+            setTimeout(() => canvas.classList.remove('line-clear-flash'), 300);
+            // Play sound: line_clear
 
             // --- Update Score --- 
             const lines = linesToRemove.length;
@@ -191,15 +200,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function pieceDrop() {
         if (!isValidMove(currentPiece, currentPiece.x, currentPiece.y + 1)) {
             // Piece has landed
-            mergePieceToBoard();
-            clearLines();
+            mergePieceToBoard(); // Lock sound/effect happens here
+            clearLines(); // Clear sound/effect happens here
             currentPiece = nextPiece;
             nextPiece = getRandomPiece();
+            // Play sound: piece_spawn (optional, maybe on game start)
             drawNextPiece();
             if (!isValidMove(currentPiece, currentPiece.x, currentPiece.y)) {
                 // Game Over
                 gameOver = true;
                 cancelAnimationFrame(gameLoopId);
+                // Play sound: game_over
                 showGameOverScreen();
             }
         } else {
@@ -212,40 +223,94 @@ document.addEventListener('DOMContentLoaded', () => {
 
      function drawBlock(ctx, x, y, colorIndex, size) {
         if (!colorIndex) return; // Don't draw empty blocks
-        
+
         const color = COLORS[colorIndex];
         const drawX = x * size;
         const drawY = y * size;
+        const studSize = size * 0.25;
+        const studSpacing = size * 0.125; // Space from edge to stud center
+        const studRadius = studSize / 2;
 
-        // Base color
-        ctx.fillStyle = color;
+        // --- 3D Effect Base --- 
+        // Slightly darker base for depth
+        ctx.fillStyle = shadeColor(color, -15); // Function to darken color slightly
         ctx.fillRect(drawX, drawY, size, size);
-
-        // Lego stud effect (simple version)
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)'; // Lighter overlay for top part of stud
-        ctx.beginPath();
-        ctx.arc(drawX + size * 0.5, drawY + size * 0.5, size * 0.25, Math.PI, 0); // Top semi-circle
-        ctx.fill();
-
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Darker overlay for bottom part of stud
-        ctx.beginPath();
-        ctx.arc(drawX + size * 0.5, drawY + size * 0.5, size * 0.25, 0, Math.PI); // Bottom semi-circle
-        ctx.fill();
         
-        // Outline
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+        // Main block color with highlight gradient
+        const gradient = ctx.createLinearGradient(drawX, drawY, drawX, drawY + size);
+        gradient.addColorStop(0, shadeColor(color, 10)); // Lighter top
+        gradient.addColorStop(1, color); // Normal bottom
+        ctx.fillStyle = gradient;
+        ctx.fillRect(drawX + 1, drawY + 1, size - 2, size - 3); // Inset slightly
+
+        // --- Draw 4 Studs --- 
+        const studPositions = [
+            { cx: drawX + studSpacing + studRadius, cy: drawY + studSpacing + studRadius },
+            { cx: drawX + size - studSpacing - studRadius, cy: drawY + studSpacing + studRadius },
+            { cx: drawX + studSpacing + studRadius, cy: drawY + size - studSpacing - studRadius },
+            { cx: drawX + size - studSpacing - studRadius, cy: drawY + size - studSpacing - studRadius }
+        ];
+        
+        studPositions.forEach(pos => {
+            // Stud base (slightly darker)
+             ctx.fillStyle = shadeColor(color, -10);
+             ctx.beginPath();
+             ctx.arc(pos.cx, pos.cy, studRadius, 0, Math.PI * 2);
+             ctx.fill();
+
+             // Stud top highlight (lighter)
+             const studGradient = ctx.createRadialGradient(pos.cx, pos.cy - studRadius*0.5, studRadius*0.2, pos.cx, pos.cy, studRadius);
+             studGradient.addColorStop(0, shadeColor(color, 25)); 
+             studGradient.addColorStop(1, color);
+             ctx.fillStyle = studGradient;
+             ctx.beginPath();
+             ctx.arc(pos.cx, pos.cy, studRadius, 0, Math.PI * 2);
+             ctx.fill();
+             
+             // Subtle stud border
+             ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+             ctx.lineWidth = 0.5;
+             ctx.stroke();
+        });
+
+        // --- Block Outline --- 
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
         ctx.lineWidth = 1;
         ctx.strokeRect(drawX, drawY, size, size);
+    }
+    
+    // Helper function to lighten/darken colors
+    function shadeColor(color, percent) {
+        let R = parseInt(color.substring(1,3),16);
+        let G = parseInt(color.substring(3,5),16);
+        let B = parseInt(color.substring(5,7),16);
 
+        R = parseInt(R * (100 + percent) / 100);
+        G = parseInt(G * (100 + percent) / 100);
+        B = parseInt(B * (100 + percent) / 100);
+
+        R = (R<255)?R:255;  
+        G = (G<255)?G:255;  
+        B = (B<255)?B:255;  
+        
+        R = Math.max(0, R);
+        G = Math.max(0, G);
+        B = Math.max(0, B);
+
+        const RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+        const GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+        const BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+
+        return "#"+RR+GG+BB;
     }
 
     function drawBoard() {
         // Clear canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw background (optional baseplate effect already in CSS)
-        context.fillStyle = '#60a0ff'; // Baseplate color slightly different from CSS bg
-        context.fillRect(0, 0, canvas.width, canvas.height);
+        // Draw background (Handled by CSS now)
+        // context.fillStyle = '#00509d'; 
+        // context.fillRect(0, 0, canvas.width, canvas.height);
 
         // Draw settled pieces
         board.forEach((row, y) => {
@@ -317,35 +382,39 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'ArrowLeft':
                 if (isValidMove(currentPiece, currentPiece.x - 1, currentPiece.y)) {
                     currentPiece.x--;
+                    // Play sound: move
                 }
                 break;
             case 'ArrowRight':
                  if (isValidMove(currentPiece, currentPiece.x + 1, currentPiece.y)) {
                     currentPiece.x++;
+                    // Play sound: move
                 }
                 break;
             case 'ArrowDown': // Soft drop
                 if (isValidMove(currentPiece, currentPiece.x, currentPiece.y + 1)) {
                     currentPiece.y++;
-                    dropCounter = 0; // Reset drop timer
+                    dropCounter = 0; 
+                    // Play sound: move (optional for soft drop)
                 } else {
-                    // If pressing down causes landing, trigger landing immediately
                     pieceDrop();
                 }
                 break;
-            case 'ArrowUp': // Rotate (can use 'x' or 'z' too)
+            case 'ArrowUp': 
             case 'z':
             case 'x':
                 rotatePiece(currentPiece);
+                // Rotate sound called inside rotatePiece
                 break;
             case ' ': // Hard drop
+                // Play sound: hard_drop (optional)
                 while (isValidMove(currentPiece, currentPiece.x, currentPiece.y + 1)) {
                     currentPiece.y++;
                 }
                 pieceDrop(); // Land the piece immediately
                 break;
         }
-        drawBoard(); // Redraw immediately after input
+        // drawBoard(); // Already removed
     }
 
     // --- Touch Controls --- //
@@ -388,8 +457,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function showGameOverScreen() {
          finalScoreElement.textContent = score;
          gameOverScreen.style.display = 'block';
-         playerNameInput.value = ''; // Clear previous name
+         // Add simple animation to modal appearance
+         gameOverScreen.style.animation = 'fadeIn 0.3s ease-out'; 
+         playerNameInput.value = '';
          playerNameInput.focus();
+         // Play sound: game_over (already noted in pieceDrop)
     }
 
     function hideGameOverScreen() {
@@ -403,22 +475,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialization and Reset --- //
 
      function calculateBlockSize() {
-        const availableHeight = window.innerHeight * 0.8; // Use 80% of height
-        const availableWidth = document.querySelector('.game-container').offsetWidth * 0.6; // Estimate width available for canvas
-        const heightBlockSize = Math.floor((availableHeight - 20) / ROWS); // -20 for padding/borders
-        const widthBlockSize = Math.floor((availableWidth - 20) / COLS);
-        // Use the smaller dimension to fit, but ensure a minimum size
+        const mainWrapperWidth = document.querySelector('.main-wrapper').offsetWidth;
+        // Try to base height calculation on available width to maintain aspect ratio better
+        const availableHeight = window.innerHeight * 0.9 - document.querySelector('.game-info').offsetHeight - 50; // Approx height minus info panel & padding
+        const availableWidth = mainWrapperWidth * 0.9; // Use 90% of wrapper width
+
+        const heightBlockSize = Math.floor(availableHeight / ROWS);
+        const widthBlockSize = Math.floor(availableWidth / COLS);
+        
         blockSize = Math.max(10, Math.min(heightBlockSize, widthBlockSize, BLOCK_SIZE_BASE)); 
         
         // Apply calculated sizes
         canvas.width = COLS * blockSize;
         canvas.height = ROWS * blockSize;
-        canvas.style.backgroundSize = `${blockSize}px ${blockSize}px`;
+        // Dynamically set the background size for the baseplate effect
+        const bgSize = `${blockSize}px ${blockSize}px`;
+        canvas.style.backgroundSize = `${bgSize}, ${bgSize}, ${bgSize}, ${bgSize}`;
 
         // Adjust next piece canvas size proportionally
-        const nextBaseSize = Math.min(blockSize * 1.5, 60); // Cap preview size
-        nextCanvas.width = NEXT_COLS * (nextBaseSize / NEXT_COLS);
-        nextCanvas.height = NEXT_ROWS * (nextBaseSize / NEXT_ROWS);
+        const nextPreviewSize = Math.floor(blockSize * 4 * 0.8); // Aim for ~80% of 4 blocks wide
+        const nextBlockSize = Math.floor(nextPreviewSize / NEXT_COLS);
+        nextCanvas.width = NEXT_COLS * nextBlockSize;
+        nextCanvas.height = NEXT_ROWS * nextBlockSize;
     }
 
     function resetGame() {
@@ -500,5 +578,16 @@ document.addEventListener('DOMContentLoaded', () => {
     context.fillStyle = 'white';
     context.textAlign = 'center';
     context.fillText('Press Start Game', canvas.width / 2, canvas.height / 3);
+
+    // Add basic fadeIn keyframes if not already in CSS (it isn't)
+    // (Alternatively, add this to style.css)
+    if (!document.styleSheets[0].cssRules.find(rule => rule.name === 'fadeIn')) {
+        document.styleSheets[0].insertRule(`
+            @keyframes fadeIn { 
+                from { opacity: 0; transform: scale(0.9); } 
+                to { opacity: 1; transform: scale(1); } 
+            }
+        `, document.styleSheets[0].cssRules.length);
+    }
 
 }); 
