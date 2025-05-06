@@ -4,54 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Louis' Lego Tetris</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Louis' Lego Tetris</h1>
+    <div class="main-wrapper">
+        <h1>Louis' Lego Tetris</h1>
 
-    <div class="game-info">
-        <div>Score: <span id="score">0</span></div>
-        <div>Level: <span id="level">1</span></div>
-        <div class="next-piece-container">
-            Next Piece:
-            <canvas id="nextPieceCanvas"></canvas>
+        <div class="game-info">
+            <div>Score: <span id="score">0</span></div>
+            <div>Level: <span id="level">1</span></div>
+            <div class="next-piece-container">
+                Next Piece:
+                <canvas id="nextPieceCanvas"></canvas>
+            </div>
+            <button id="startRestartButton">Start Game</button>
+            <button id="highScoresButton">High Scores</button>
         </div>
-        <button id="startRestartButton">Start Game</button>
-        <button id="highScoresButton">High Scores</button>
-    </div>
 
-    <div class="game-container">
-        <canvas id="gameCanvas"></canvas>
-    </div>
+        <div class="game-container">
+            <canvas id="gameCanvas"></canvas>
+        </div>
 
-    <div class="controls">
-        <button id="leftButton" class="control-button">←</button>
-        <button id="rotateButton" class="control-button">↻</button>
-        <button id="rightButton" class="control-button">→</button>
-        <button id="softDropButton" class="control-button">↓</button>
-        <button id="hardDropButton" class="control-button">↓↓</button>
-    </div>
+        <div class="controls">
+            <button id="leftButton" class="control-button">←</button>
+            <button id="rotateButton" class="control-button">↻</button>
+            <button id="rightButton" class="control-button">→</button>
+            <button id="softDropButton" class="control-button">↓</button>
+            <button id="hardDropButton" class="control-button">↓↓</button>
+        </div>
 
-    <div id="gameOverScreen" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>Game Over!</h2>
-            <p>Your Score: <span id="finalScore">0</span></p>
-            <label for="playerName">Enter Name:</label>
-            <input type="text" id="playerName" maxlength="10">
-            <button id="submitScoreButton">Submit Score</button>
+        <div id="gameOverScreen" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h2>Game Over!</h2>
+                <p>Your Score: <span id="finalScore">0</span></p>
+                <label for="playerName">Enter Name:</label>
+                <input type="text" id="playerName" maxlength="10">
+                <button id="submitScoreButton">Submit Score</button>
+            </div>
+        </div>
+
+         <div id="highScoresScreen" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h2>High Scores</h2>
+                <ol id="highScoresList">
+                    <!-- High scores will be populated here -->
+                </ol>
+                <button id="closeHighScoresButton">Close</button>
+            </div>
         </div>
     </div>
 
-     <div id="highScoresScreen" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2>High Scores</h2>
-            <ol id="highScoresList">
-                <!-- High scores will be populated here -->
-            </ol>
-            <button id="closeHighScoresButton">Close</button>
-        </div>
-    </div>
-
+    </div> <!-- Close main-wrapper -->
 
     <script src="script.js"></script>
 </body>
