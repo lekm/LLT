@@ -36,16 +36,22 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* background-color: #f0f0f0; */
-    background: linear-gradient(to bottom, #f0f4f8, #d9e2ec); /* Light blue/grey gradient */
-    color: #333;
-    /* margin: 0; Already set by * */
-    padding: 10px; /* Keep some padding */
-    touch-action: manipulation; /* Prevent double-tap zoom */
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    min-height: 100vh; /* Fallback for older browsers */
-    min-height: 100dvh; /* Use dynamic viewport height */
-    height: 100dvh; /* Force body to take dynamic height */
+    /* Removed image background */
+    background-color: #B4D2E3; /* Lego Light Blue */
+    color: #0B0B0B; /* Use Lego Black for base text */
+    padding: 10px;
+    touch-action: manipulation;
+    overflow-x: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100dvh;
+    /* Optional image setup (commented out) 
+    background-image: url('YOUR_IMAGE_PATH_HERE');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    */
 }
 
 .main-wrapper {
@@ -59,13 +65,13 @@ body {
 }
 
 h1 {
-    color: #D90429; /* Brighter Lego Red */
-    margin-top: 5px; /* Reduced top margin */
-    margin-bottom: 10px; /* Reduced bottom margin */
-    font-size: 1.5em; /* Slightly smaller base title */
-    text-shadow: 2px 2px 0px #a3031e; /* Simple text shadow */
+    color: #C91A09; /* Lego Bright Red */
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    text-shadow: 2px 2px 0px #8f1306; /* Darker red shadow */
     text-align: center;
-    flex-shrink: 0; /* Prevent title from shrinking */
+    flex-shrink: 0;
 }
 
 /* --- Game Info Panel (Top) --- */
@@ -77,66 +83,67 @@ h1 {
     align-items: center;
     gap: 10px 15px;
     padding: 10px;
-    background-color: #f8f9fa;
+    /* background-color: #f8f9fa; */
+    background-color: #FFFFFF; /* Lego White */
     border-radius: 6px;
-    margin-bottom: 15px; /* Reduced margin */
-    width: auto; /* Let content define width */
-    max-width: 95%; /* Allow slightly wider */
+    margin-bottom: 15px;
+    width: auto;
+    max-width: 95%;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 3px solid #dee2e6; /* Thicker plate-like border */
-    border-bottom-color: #ced4da; /* Slightly darker bottom edge */
+    border: 3px solid #A0A5A9; /* Lego Medium Stone Grey */
+    border-bottom-color: #6c757d; /* Darker grey edge */
     position: relative;
-    flex-shrink: 0; /* Prevent info panel from shrinking */
+    flex-shrink: 0;
 }
 
-/* Add "studs" to the info panel border */
+/* Studs on the info panel border */
 .game-info::before {
     content: '';
     position: absolute;
     top: -8px; left: 10px; right: 10px;
     height: 8px;
     background-image: repeating-linear-gradient(90deg,
-        #dee2e6 0, #dee2e6 12px, /* Stud color */
+        #A0A5A9 0, #A0A5A9 12px, /* Stud color (Grey) */
         transparent 12px, transparent 18px /* Gap */
     );
     border-radius: 4px 4px 0 0;
 }
 
 .game-info > div:not(.next-piece-container) {
-    background-color: #fff; 
+    background-color: #FFFFFF; /* Lego White */
     padding: 6px 12px;
     border-radius: 4px;
-    font-size: 0.7em; 
-    border: 1px solid #e9ecef;
+    font-size: 0.7em;
+    border: 1px solid #E4D4AF; /* Lego Tan border */
     min-width: 80px;
     text-align: center;
-    color: #495057;
+    color: #0B0B0B; /* Lego Black text */
     line-height: 1.2;
 }
 
 .game-info span {
-    color: #00509d; /* Match new block color */
-    display: block; /* Score/level number below text */
+    color: #0055BF; /* Lego Bright Blue */
+    display: block;
     min-width: auto;
-    font-size: 1.3em; 
+    font-size: 1.3em;
     margin-left: 0;
     margin-top: 2px;
 }
 
 .next-piece-container {
-    border: 1px solid #e9ecef;
+    border: 1px solid #E4D4AF; /* Lego Tan border */
     padding: 5px;
-    background-color: #fff;
+    background-color: #FFFFFF; /* Lego White */
     font-size: 0.6em;
     border-radius: 4px;
     box-shadow: none;
-    order: 3; /* Move next piece visually after score/level */
+    order: 3;
 }
 
 #nextPieceCanvas {
     display: block;
     margin: 4px auto 0;
-    background-color: #f1f3f5;
+    background-color: #A0A5A9; /* Lego Medium Stone Grey */
     border-radius: 2px;
 }
 
@@ -147,28 +154,28 @@ button {
     font-size: 0.8em;
     cursor: pointer;
     border: none;
-    border-radius: 5px; /* Base rounding */
-    background-color: #6c757d; /* Default grey - will be overridden */
-    color: white;
+    border-radius: 5px;
+    background-color: #A0A5A9; /* Lego Medium Stone Grey */
+    color: #FFFFFF; /* Lego White text */
     transition: all 0.15s ease;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.2); /* Deeper shadow */
+    box-shadow: 0 4px 0 #6c757d; /* Darker grey shadow */
     text-transform: uppercase;
-    position: relative; /* For potential studs */
-    border-top: 1px solid rgba(255,255,255,0.2); /* Top highlight */
+    position: relative;
+    border-top: 1px solid #c0c5c9; /* Lighter grey highlight */
 }
 
-button::before { /* Simulate studs on buttons */
+button::before { /* Button studs */
     content: '';
     position: absolute;
     top: 3px; left: 5px; right: 5px;
     height: 4px;
     background-image: repeating-linear-gradient(90deg,
-        rgba(255,255,255,0.3) 0, rgba(255,255,255,0.3) 6px, /* Lighter stud color */
-        transparent 6px, transparent 10px /* Gap */
+        #c0c5c9 0, #c0c5c9 6px, /* Lighter stud color */
+        transparent 6px, transparent 10px
     );
     border-radius: 2px;
-    opacity: 0.8;
-    pointer-events: none; /* Don't interfere with clicks */
+    opacity: 0.9;
+    pointer-events: none;
 }
 
 button:hover {
@@ -185,16 +192,16 @@ button:active {
 .game-info button {
     padding: 8px 12px;
     font-size: 0.6em;
-    background-color: #FFCF00; /* Lego Yellow */
-    color: #333;
-    box-shadow: 0 3px 0 #E6B800;
-    border-top-color: #FFE066;
-    order: 4; /* Place buttons last */
+    background-color: #FCC80A; /* Lego Bright Yellow */
+    color: #0B0B0B; /* Lego Black text */
+    box-shadow: 0 3px 0 #d9ad08; /* Darker yellow shadow */
+    border-top-color: #ffe066;
+    order: 4;
 }
 .game-info button::before { /* Yellow studs */
      background-image: repeating-linear-gradient(90deg,
-        #FFE066 0, #FFE066 5px, 
-        transparent 5px, transparent 8px 
+        #ffe066 0, #ffe066 5px, 
+        transparent 5px, transparent 8px
     );
 }
 
@@ -205,53 +212,46 @@ button:active {
     gap: 12px;
     width: 100%;
     max-width: 320px;
-    margin-top: auto; /* Push controls towards the bottom */
-    padding-bottom: 5px; /* Add small padding at the very bottom */
-    flex-shrink: 0; /* Prevent controls from shrinking */
+    margin-top: auto;
+    padding-bottom: 5px;
+    flex-shrink: 0;
 }
 
 .control-button {
     font-size: 1.1em;
     padding: 15px;
-    color: white;
+    color: #FFFFFF; /* Lego White text default */
 }
 
 /* Specific colors for control buttons */
-#leftButton { 
-    background-color: #00509d; /* Blue */
-    box-shadow: 0 4px 0 #00386e;
-    border-top-color: #337abc;
+#leftButton, #rightButton { 
+    background-color: #0055BF; /* Lego Bright Blue */
+    box-shadow: 0 4px 0 #003c8f;
+    border-top-color: #337ac9;
 }
-#leftButton::before { background-image: repeating-linear-gradient(90deg, #337abc 0, #337abc 6px, transparent 6px, transparent 10px); }
-
-#rightButton { 
-    background-color: #00509d; /* Blue */
-     box-shadow: 0 4px 0 #00386e;
-     border-top-color: #337abc;
-}
-#rightButton::before { background-image: repeating-linear-gradient(90deg, #337abc 0, #337abc 6px, transparent 6px, transparent 10px); }
+#leftButton::before, #rightButton::before { background-image: repeating-linear-gradient(90deg, #337ac9 0, #337ac9 6px, transparent 6px, transparent 10px); }
 
 #rotateButton { 
-    background-color: #2a9d8f; /* Teal/Green */
-    box-shadow: 0 4px 0 #1e7168;
-    border-top-color: #57bcae;
+    background-color: #237841; /* Lego Dark Green */
+    box-shadow: 0 4px 0 #1a5931;
+    border-top-color: #4eae70;
 }
-#rotateButton::before { background-image: repeating-linear-gradient(90deg, #57bcae 0, #57bcae 6px, transparent 6px, transparent 10px); }
+#rotateButton::before { background-image: repeating-linear-gradient(90deg, #4eae70 0, #4eae70 6px, transparent 6px, transparent 10px); }
 
 #softDropButton {
-    background-color: #f77f00; /* Orange */
-    box-shadow: 0 4px 0 #c46500;
-    border-top-color: #ffa440;
+    background-color: #FCC80A; /* Lego Bright Yellow */
+    box-shadow: 0 4px 0 #d9ad08;
+    border-top-color: #ffe066;
+    color: #0B0B0B; /* Black text for yellow */
 }
-#softDropButton::before { background-image: repeating-linear-gradient(90deg, #ffa440 0, #ffa440 6px, transparent 6px, transparent 10px); }
+#softDropButton::before { background-image: repeating-linear-gradient(90deg, #ffe066 0, #ffe066 6px, transparent 6px, transparent 10px); }
 
 #hardDropButton {
-    background-color: #D90429; /* Red */
-    box-shadow: 0 4px 0 #a3031e;
-     border-top-color: #ff4d6a;
+    background-color: #C91A09; /* Lego Bright Red */
+    box-shadow: 0 4px 0 #8f1306;
+     border-top-color: #f24d3d;
 }
-#hardDropButton::before { background-image: repeating-linear-gradient(90deg, #ff4d6a 0, #ff4d6a 6px, transparent 6px, transparent 10px); }
-
+#hardDropButton::before { background-image: repeating-linear-gradient(90deg, #f24d3d 0, #f24d3d 6px, transparent 6px, transparent 10px); }
 
 /* --- Modal Styles --- */
 .modal {
@@ -269,23 +269,23 @@ button:active {
 
 .modal-content {
     font-family: 'Press Start 2P', cursive; /* Use game font */
-    background-color: #f8f9fa;
+    background-color: #FFFFFF; /* Lego White */
     margin: 15% auto;
     padding: 25px 30px;
-    border: 1px solid #ced4da;
+    border: 3px solid #A0A5A9; /* Lego Medium Stone Grey */
     width: 85%;
     max-width: 450px;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    color: #333;
+    color: #0B0B0B; /* Lego Black */
 }
 
 .modal-content h2 {
     margin-top: 0;
     margin-bottom: 20px;
     font-size: 1.2em;
-    color: #d90429; /* Red title */
+    color: #C91A09; /* Lego Bright Red */
 }
 
 .modal-content p {
@@ -304,28 +304,33 @@ button:active {
     padding: 10px;
     margin-bottom: 20px;
     width: calc(100% - 24px);
-    border: 1px solid #ced4da;
+    border: 2px solid #A0A5A9; /* Lego Medium Stone Grey */
     border-radius: 6px;
     font-size: 0.9em;
-    background-color: #fff;
+    background-color: #FFFFFF; /* Lego White */
+    color: #0B0B0B; /* Lego Black */
 }
 
 .modal-content button {
-    /* Inherit general button styles now */
-    /* Use a specific color */
-    background-color: #2a9d8f; /* Teal confirm */
-    box-shadow: 0 4px 0 #1e7168;
-    border-top-color: #57bcae;
+    /* Base style inherited */
+    color: #FFFFFF; /* White text */
 }
-.modal-content button::before { background-image: repeating-linear-gradient(90deg, #57bcae 0, #57bcae 6px, transparent 6px, transparent 10px); }
 
-/* Style the close button specifically */
-#closeHighScoresButton {
-    background-color: #6c757d; /* Grey close */
-    box-shadow: 0 4px 0 #495057;
-    border-top-color: #909da6;
+/* Submit Button */
+#submitScoreButton {
+    background-color: #237841; /* Lego Dark Green */
+    box-shadow: 0 4px 0 #1a5931;
+    border-top-color: #4eae70;
 }
-#closeHighScoresButton::before { background-image: repeating-linear-gradient(90deg, #909da6 0, #909da6 6px, transparent 6px, transparent 10px); }
+#submitScoreButton::before { background-image: repeating-linear-gradient(90deg, #4eae70 0, #4eae70 6px, transparent 6px, transparent 10px); }
+
+/* Close Button */
+#closeHighScoresButton {
+    background-color: #A0A5A9; /* Lego Medium Stone Grey */
+    box-shadow: 0 4px 0 #6c757d;
+    border-top-color: #c0c5c9;
+}
+#closeHighScoresButton::before { background-image: repeating-linear-gradient(90deg, #c0c5c9 0, #c0c5c9 6px, transparent 6px, transparent 10px); }
 
 /* High Score List specific styles */
 #highScoresList {
@@ -335,17 +340,18 @@ button:active {
     max-height: 200px; /* Allow scrolling if list is long */
     overflow-y: auto;
     margin-bottom: 20px;
-    border: 1px solid #eee;
+    background: #FFFFFF; /* Lego White */
+    border: 2px solid #E4D4AF; /* Lego Tan */
+    color: #0B0B0B; /* Lego Black */
     padding: 10px;
     border-radius: 6px;
-    background: #fff;
 }
 
 #highScoresList li {
     margin-bottom: 8px;
     font-size: 0.8em;
     padding-bottom: 5px;
-    border-bottom: 1px dashed #eee;
+    border-bottom: 1px dashed #A0A5A9; /* Lego Medium Stone Grey */
 }
 #highScoresList li:last-child {
     border-bottom: none;
@@ -357,15 +363,21 @@ button:active {
 
 /* --- Game Container & Canvas --- */
 .game-container {
-    display: flex; /* Use flex to center canvas */
+    display: flex; 
     justify-content: center;
-    align-items: center; /* Center canvas vertically too */
-    gap: 0; /* Remove gap as we center */
-    margin-bottom: 10px; /* Reduced margin */
-    width: 100%;
+    align-items: center; 
+    gap: 0; 
+    margin-bottom: 10px; 
+    width: 100%; 
+    max-width: calc(100% - 20px); 
     position: relative; 
-    flex-grow: 1; /* THIS is the crucial part - allows it to take remaining space */
-    min-height: 0; /* IMPORTANT for flex column children */
+    flex-grow: 1; 
+    min-height: 0; 
+    /* Removed readability background */
+    /* background-color: rgba(248, 249, 250, 0.85); */
+    padding: 0; /* Remove padding */
+    border-radius: 0; /* Remove rounding */
+    box-shadow: none; /* Remove shadow */
 }
 
 /* Remove the pseudo-element border for now, complicates flexible sizing */
@@ -373,20 +385,21 @@ button:active {
 /* .game-container::after { ... } */
 
 #gameCanvas {
-    border: 1px solid rgba(0,0,0,0.1); 
+    border: 5px solid #A0A5A9; /* Lego Medium Stone Grey Border */
     border-radius: 3px; 
-    background-color: #00509d; 
-    background-image: /* Keep background image */
+    background-color: #0055BF; /* Lego Bright Blue Baseplate */
+    background-image: 
         radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.2) 10%, transparent 11%),
-        radial-gradient(circle, #00509d 20%, transparent 21%),
-        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        radial-gradient(circle, #0055BF 20%, transparent 21%), /* Match baseplate color */
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
     background-position: 0 0, 0 0, 0 0, 0 0; 
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2);
-    /* Width and Height will be set by JS based on container */
-    max-width: 100%; /* Ensure canvas doesn't overflow its container */
-    max-height: 100%; /* Ensure canvas doesn't overflow its container */
-    object-fit: contain; /* Maintain aspect ratio if constrained */
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+    max-width: 100%; 
+    max-height: 100%; 
+    object-fit: contain; 
+    /* Remove background shadow as container has one now */
+    /* box-shadow: inset 0 0 10px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2); */
 }
 
 /* --- Media Queries Adjustments --- */
