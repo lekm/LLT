@@ -156,45 +156,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function clearLines() {
         let linesToRemove = [];
+        // 1. Find all completed lines first (iterate bottom-up)
         for (let y = ROWS - 1; y >= 0; y--) {
             if (board[y].every(cell => cell !== 0)) {
                 linesToRemove.push(y);
             }
         }
 
+        // 2. Proceed only if lines were completed
         if (linesToRemove.length > 0) {
-            // Simple "breaking" effect - could be enhanced
-            linesToRemove.forEach(y => {
-                 // In a real game, you might trigger an animation here
-                 // For now, we just remove and shift down
-                 board.splice(y, 1);
-                 board.unshift(Array(COLS).fill(0));
-            });
+            const linesClearedCount = linesToRemove.length;
 
-            // --- Add flash effect --- 
-            canvas.classList.add('line-clear-flash');
-            setTimeout(() => canvas.classList.remove('line-clear-flash'), 300);
-            // Play sound: line_clear
-
-            // --- Update Score --- 
-            const lines = linesToRemove.length;
+            // 3. Score Calculation based on simultaneous clears
             let points = 0;
-            if (lines === 1) points = 40 * level;
-            else if (lines === 2) points = 100 * level;
-            else if (lines === 3) points = 300 * level;
-            else if (lines >= 4) points = 1200 * level; // Tetris!
+            if (linesClearedCount === 1) points = 40 * level;
+            else if (linesClearedCount === 2) points = 100 * level;
+            else if (linesClearedCount === 3) points = 300 * level;
+            else if (linesClearedCount >= 4) points = 1200 * level; // Tetris!
             score += points;
-            scoreElement.textContent = score;
-
-            // --- Update Level --- 
-            linesCleared += lines;
+            
+            // 4. Update total lines cleared and level
+            linesCleared += linesClearedCount;
             const newLevel = Math.floor(linesCleared / 10) + 1;
             if (newLevel > level) {
                 level = newLevel;
-                levelElement.textContent = level;
-                // Increase speed (decrease interval)
                 dropInterval = Math.max(100, 1000 - (level - 1) * 50);
+                 // Play sound: level_up (optional)
             }
+
+            // 5. Efficient Line Removal and Shift (bottom-up removal)
+            // linesToRemove is already sorted descending (e.g., [19, 18])
+            linesToRemove.forEach(rowIndex => {
+                board.splice(rowIndex, 1); // Remove the completed row
+            });
+            
+            // Add new empty rows at the top
+            for (let i = 0; i < linesClearedCount; i++) {
+                board.unshift(Array(COLS).fill(0));
+            }
+
+            // 6. Update Display Elements
+            scoreElement.textContent = score;
+            levelElement.textContent = level;
+
+            // 7. Trigger Animation & Sound
+            canvas.classList.add('line-clear-flash');
+            setTimeout(() => canvas.classList.remove('line-clear-flash'), 300);
+            // Play sound: line_clear (adjust sound based on linesClearedCount?)
         }
     }
 
