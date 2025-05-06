@@ -9,18 +9,19 @@
 <body>
     <h1>Louis' Lego Tetris</h1>
 
+    <div class="game-info">
+        <div>Score: <span id="score">0</span></div>
+        <div>Level: <span id="level">1</span></div>
+        <div class="next-piece-container">
+            Next Piece:
+            <canvas id="nextPieceCanvas"></canvas>
+        </div>
+        <button id="startRestartButton">Start Game</button>
+        <button id="highScoresButton">High Scores</button>
+    </div>
+
     <div class="game-container">
         <canvas id="gameCanvas"></canvas>
-        <div class="game-info">
-            <div>Score: <span id="score">0</span></div>
-            <div>Level: <span id="level">1</span></div>
-            <div class="next-piece-container">
-                Next Piece:
-                <canvas id="nextPieceCanvas"></canvas>
-            </div>
-            <button id="startRestartButton">Start Game</button>
-            <button id="highScoresButton">High Scores</button>
-        </div>
     </div>
 
     <div class="controls">

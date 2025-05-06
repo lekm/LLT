@@ -15,12 +15,85 @@ h1 {
     margin-bottom: 10px;
 }
 
-.game-container {
+/* --- Game Info Panel (Moved to Top) --- */
+.game-info {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    flex-direction: row; /* Horizontal layout */
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    justify-content: center; /* Center items */
+    align-items: center; /* Align items vertically */
+    gap: 15px; /* Space between items */
+    padding: 10px;
+    background-color: #cccccc; /* Lego grey background */
+    border-radius: 5px;
+    margin-bottom: 15px; /* Space below the panel */
+    width: 95%;
+    max-width: 600px; /* Limit width on large screens */
+    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1); /* Subtle bottom shadow */
+}
+
+.game-info > div:not(.next-piece-container) {
+    background-color: #fafafa; /* Light background for score/level boxes */
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1em; /* Adjusted font size */
+    border: 1px solid #999;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    min-width: 80px; /* Minimum width */
+    text-align: center;
+}
+
+.game-info span {
+    color: #007bff;
+    display: inline-block; /* Ensure span takes space */
+    min-width: 30px; /* Give space for numbers */
+}
+
+.next-piece-container {
+    border: 2px solid #333; /* Thicker border */
+    padding: 5px;
+    background-color: #fefefe; /* White background */
+    text-align: center;
+    font-size: 0.8em; /* Smaller text */
+    font-weight: bold;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+#nextPieceCanvas {
+    display: block;
+    margin: 3px auto 0;
+    background-color: #e0e0e0; /* Light grey background for preview */
+}
+
+/* Style buttons within the info panel */
+.game-info button {
+    padding: 8px 12px; /* Smaller padding */
+    font-size: 0.9em;
+    background-color: #FFCF00; /* Lego Yellow */
+    color: #333;
+    border: 1px solid #E6B800;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.game-info button:hover {
+    background-color: #E6B800;
+}
+
+.game-info button:active {
+    background-color: #CCA300;
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* --- Game Container (Below Info Panel) --- */
+.game-container {
+    display: flex; /* Keep flex for potential future side elements */
     justify-content: center;
+    align-items: flex-start; /* Align canvas to top */
     gap: 20px;
     margin-bottom: 10px;
+    width: 100%; /* Take full width */
 }
 
 #gameCanvas {
@@ -29,27 +102,6 @@ h1 {
                       linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-color: #5c94fc; /* Baseplate blue-ish */
     /* background-size will be set by JS based on block size */
-}
-
-.game-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.2em;
-    min-width: 150px; /* Ensure info doesn't get too squished */
-}
-
-.next-piece-container {
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #fff;
-    text-align: center;
-}
-
-#nextPieceCanvas {
-    display: block;
-    margin: 5px auto 0;
 }
 
 button {
@@ -183,31 +235,34 @@ button:active {
     border-top-color: rgba(255, 255, 255, 0.5);
 }
 
-
-/* Media Queries for Responsiveness */
+/* --- Adjust Media Queries --- */
 
 /* Smaller mobile devices */
 @media (max-width: 600px) {
     h1 {
         font-size: 1.5em;
     }
+    .game-info {
+        gap: 10px;
+        padding: 8px;
+        width: 90%; /* Adjust width */
+    }
+    .game-info > div:not(.next-piece-container) {
+        padding: 6px 10px;
+        font-size: 0.9em;
+        min-width: 60px;
+    }
+    .game-info button {
+         padding: 6px 10px;
+         font-size: 0.8em;
+    }
+
+    /* Keep game container centered column */
     .game-container {
         flex-direction: column;
         align-items: center;
     }
-    .game-info {
-        flex-direction: row;
-        justify-content: space-around;
-        width: 90%;
-        font-size: 1em;
-    }
-    .next-piece-container {
-        border: none;
-        padding: 0;
-    }
-    #nextPieceCanvas {
-        margin: 0;
-    }
+
     .controls {
         max-width: 90%;
     }
