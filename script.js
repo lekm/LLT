@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dropInterval;
     let gameLoopId;
     let highScores = [];
+    const gameContainer = document.querySelector('.game-container'); // Cache game container
 
     // --- Game Logic Functions --- //
 
@@ -475,26 +476,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initialization and Reset --- //
 
      function calculateBlockSize() {
-        const mainWrapperWidth = document.querySelector('.main-wrapper').offsetWidth;
-        // Try to base height calculation on available width to maintain aspect ratio better
-        const availableHeight = window.innerHeight * 0.9 - document.querySelector('.game-info').offsetHeight - 50; // Approx height minus info panel & padding
-        const availableWidth = mainWrapperWidth * 0.9; // Use 90% of wrapper width
+        // Get available dimensions from the flex container for the canvas
+        const containerWidth = gameContainer.offsetWidth - 20; // Subtract some padding/border allowance
+        const containerHeight = gameContainer.offsetHeight - 10; // Subtract some padding/border allowance
+        
+        if (containerWidth <= 0 || containerHeight <= 0) return; // Avoid errors if container not rendered
 
-        const heightBlockSize = Math.floor(availableHeight / ROWS);
-        const widthBlockSize = Math.floor(availableWidth / COLS);
+        // Calculate block size based on container dimensions
+        const blockSizeW = Math.floor(containerWidth / COLS);
+        const blockSizeH = Math.floor(containerHeight / ROWS);
         
-        blockSize = Math.max(10, Math.min(heightBlockSize, widthBlockSize, BLOCK_SIZE_BASE)); 
+        // Use the smaller dimension to fit the entire board
+        blockSize = Math.max(8, Math.min(blockSizeW, blockSizeH)); // Ensure minimum size of 8px
         
-        // Apply calculated sizes
-        canvas.width = COLS * blockSize;
-        canvas.height = ROWS * blockSize;
+        // Apply calculated sizes to the main canvas
+        const canvasWidth = COLS * blockSize;
+        const canvasHeight = ROWS * blockSize;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
         // Dynamically set the background size for the baseplate effect
         const bgSize = `${blockSize}px ${blockSize}px`;
         canvas.style.backgroundSize = `${bgSize}, ${bgSize}, ${bgSize}, ${bgSize}`;
 
         // Adjust next piece canvas size proportionally
-        const nextPreviewSize = Math.floor(blockSize * 4 * 0.8); // Aim for ~80% of 4 blocks wide
-        const nextBlockSize = Math.floor(nextPreviewSize / NEXT_COLS);
+        // Keep next piece preview relatively small and consistent
+        const nextBlockSize = Math.max(8, Math.min(15, Math.floor(blockSize * 0.6))); // Smaller preview blocks
         nextCanvas.width = NEXT_COLS * nextBlockSize;
         nextCanvas.height = NEXT_ROWS * nextBlockSize;
     }
@@ -532,11 +539,10 @@ document.addEventListener('DOMContentLoaded', () => {
     startRestartButton.addEventListener('click', startGame);
     document.addEventListener('keydown', handleKeyDown);
     window.addEventListener('resize', () => {
-        if (!gameOver) {
-            calculateBlockSize();
-            drawBoard(); // Redraw board with new size
-            drawNextPiece(); // Redraw next piece with new size
-        }
+        // No longer need to check !gameOver, resize anytime
+        calculateBlockSize();
+        drawBoard(); // Redraw board with new size
+        drawNextPiece(); // Redraw next piece with new size
     });
 
     submitScoreButton.addEventListener('click', () => {
